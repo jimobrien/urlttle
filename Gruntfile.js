@@ -1,9 +1,15 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
-
     pkg: grunt.file.readJSON('package.json'),
-    concat: {
+
+    env: {
+      dev: {
+        NODE_ENV: 'development'
+      },
+      prod: {
+        NODE_ENV: 'production'
+      }
     },
 
     mochaTest: {
@@ -86,6 +92,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-env');
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
@@ -123,9 +130,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
-      grunt.task.run([ 'server-prod' ]);
+      grunt.task.run([ 'env:prod', 'server-prod' ]);
     } else {
-      grunt.task.run([ 'server-dev' ]);
+      grunt.task.run([ 'env:dev', 'server-dev' ]);
     }
   });
 
